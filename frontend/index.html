@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tutor Pro - Revolutionary AI-Powered Learning Platform</title>
+    <meta name="description" content="Transform your learning experience with AI Tutor Pro. Get personalized tutoring, practice questions, and 24/7 academic support for Nigerian students.">
+    <meta name="keywords" content="AI tutor, online learning, Nigerian education, personalized tutoring, practice questions">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/layout.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    
+    <!-- JavaScript Files -->
+    <script src="assets/js/app.js" defer></script>
+    <script src="assets/js/auth.js" defer></script>
+    <script src="assets/js/chat.js" defer></script>
+    <script src="assets/js/quiz.js" defer></script>
+    <script src="assets/js/study-groups.js" defer></script>
+    <script src="assets/js/dashboard.js" defer></script>
+</head>
+<body>
+    <!-- Header/Navigation -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="nav-brand">
+                    <a href="#" class="logo">
+                        <img src="images/logo.svg" alt="AI Tutor Pro Logo" class="logo-image">
+                    </a>
+                </div>
+                
+                <div class="nav-menu" id="navMenu">
+                    <a href="#home" class="nav-link">Home</a>
+                    <a href="#features" class="nav-link">Features</a>
+                    <a href="#testimonials" class="nav-link">Success Stories</a>
+                    <a href="#demo" class="nav-link">Try Demo</a>
+                    <div class="nav-actions">
+                        <button onclick="showLogin()" class="btn btn-outline">Login</button>
+                        <button onclick="showSignup()" class="btn btn-primary">Get Started</button>
+                        <button onclick="testNav()" class="btn btn-secondary">Test Nav</button>
+                    </div>
+                </div>
+                
+                <!-- Logged-in user navigation (hidden by default) -->
+                <div class="nav-menu logged-in-nav" id="loggedInNav" style="display: none;">
+                    <a href="#home" class="nav-link">Home</a>
+                    <a href="#dashboard" class="nav-link">Dashboard</a>
+                    <a href="#quiz" class="nav-link">Quizzes</a>
+                    <a href="#studyGroups" class="nav-link">Study Groups</a>
+                    <a href="#chat" class="nav-link">AI Tutor</a>
+                    <div class="nav-actions">
+                        <button onclick="logout()" class="btn btn-outline">Logout</button>
+                        <span class="user-name" id="userName">User</span>
+                    </div>
+                </div>
+                
+                <button id="navToggle" class="nav-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <div class="hero-background">
+                <div class="hero-shapes">
+                    <div class="shape shape-1"></div>
+                    <div class="shape shape-2"></div>
+                    <div class="shape shape-3"></div>
+                </div>
+            </div>
+            
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <div class="hero-badge">
+                            <i class="fas fa-star"></i>
+                            <span>Trusted by 10,000+ Nigerian Students</span>
+                        </div>
+                        
+                        <h1 class="hero-title">
+                            Your Personal <span class="gradient-text">AI Tutor</span>
+                            <br>Available 24/7
+                        </h1>
+                        
+                        <p class="hero-description">
+                            Get instant, personalized help with Math, Science, and English. 
+                            Our AI understands Nigerian curriculum and provides step-by-step explanations 
+                            tailored to your learning style.
+                        </p>
+                        
+                        <div class="hero-stats">
+                            <div class="stat">
+                                <span class="stat-number">95%</span>
+                                <span class="stat-label">Success Rate</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number">24/7</span>
+                                <span class="stat-label">Availability</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number">50K+</span>
+                                <span class="stat-label">Questions Answered</span>
+                            </div>
+                        </div>
+                        
+                        <div class="hero-actions">
+                            <button onclick="scrollToDemo()" class="btn btn-primary btn-large">
+                                <i class="fas fa-play"></i>
+                                Try Free Demo
+                            </button>
+                            <button onclick="showSignup()" class="btn btn-outline btn-large">
+                                <i class="fas fa-user-plus"></i>
+                                Start Learning
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="hero-visual">
+                        <div class="hero-image">
+                            <div class="floating-card card-1">
+                                <i class="fas fa-brain"></i>
+                                <span>Smart AI</span>
+                            </div>
+                            <div class="floating-card card-2">
+                                <i class="fas fa-chart-line"></i>
+                                <span>Progress Tracking</span>
+                            </div>
+                            <div class="floating-card card-3">
+                                <i class="fas fa-users"></i>
+                                <span>Study Groups</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="features">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Why Students Choose AI Tutor Pro</h2>
+                    <p class="section-subtitle">Experience the future of personalized learning</p>
+                </div>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                        </div>
+                        <h3>Intelligent Explanations</h3>
+                        <p>Get detailed, step-by-step explanations that adapt to your learning pace and style. Our AI understands context and builds on previous knowledge.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Personalized learning paths</li>
+                            <li><i class="fas fa-check"></i> Context-aware responses</li>
+                            <li><i class="fas fa-check"></i> Nigerian curriculum aligned</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                        </div>
+                        <h3>24/7 Availability</h3>
+                        <p>Never wait for help again. Our AI tutor is available round the clock, ready to assist with homework, exam prep, or concept clarification.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Instant responses</li>
+                            <li><i class="fas fa-check"></i> No waiting time</li>
+                            <li><i class="fas fa-check"></i> Study at your pace</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h3>Practice & Progress</h3>
+                        <p>Generate unlimited practice questions, track your progress, and identify areas for improvement with our comprehensive analytics.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Custom practice questions</li>
+                            <li><i class="fas fa-check"></i> Progress tracking</li>
+                            <li><i class="fas fa-check"></i> Performance analytics</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section id="testimonials" class="testimonials">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Success Stories</h2>
+                    <p class="section-subtitle">See how AI Tutor Pro is transforming learning</p>
+                </div>
+                
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <p>"AI Tutor Pro helped me understand complex math concepts that I struggled with for months. The explanations are so clear!"</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="author-info">
+                                <h4>Sarah Johnson</h4>
+                                <span>SS2 Student, Lagos</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <p>"The practice questions are perfect for exam preparation. I improved my physics grade from C to A in just 3 months!"</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="author-info">
+                                <h4>Michael Adebayo</h4>
+                                <span>SS3 Student, Abuja</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <p>"As a parent, I love how AI Tutor Pro provides 24/7 support. My daughter can study anytime without waiting for a tutor."</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="author-info">
+                                <h4>Mrs. Oluwaseun</h4>
+                                <span>Parent, Port Harcourt</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Demo Section -->
+        <section id="demo" class="demo">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Try Our AI Tutor</h2>
+                    <p class="section-subtitle">Experience the power of personalized AI tutoring</p>
+                </div>
+                
+                <div class="demo-container">
+                    <div class="demo-info">
+                        <h3>Ask Any Question</h3>
+                        <p>Get instant, detailed explanations for any subject. Our AI understands the Nigerian curriculum and provides step-by-step solutions.</p>
+                        
+                        <div class="demo-features">
+                            <div class="feature">
+                                <i class="fas fa-brain"></i>
+                                <span>Smart Explanations</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-clock"></i>
+                                <span>24/7 Available</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-graduation-cap"></i>
+                                <span>Curriculum Aligned</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="demo-chat">
+                        <div class="chat-header">
+                            <h3>AI Tutor Chat</h3>
+                            <button id="chatToggle" class="btn btn-outline btn-small">
+                                <i class="fas fa-comments"></i>
+                                <span id="toggleText">Open AI Chat</span>
+                            </button>
+                        </div>
+                        
+                        <div id="demoContainer" class="chat-container" style="display: none;">
+                            <div class="chat-messages" id="chatMessages">
+                                <!-- Messages will appear here -->
+                            </div>
+                            
+                            <form id="chatForm" class="chat-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="subjectSelect">Subject</label>
+                                        <select id="subjectSelect" class="form-control" required>
+                                            <option value="">Select Subject</option>
+                                            <option value="Mathematics">Mathematics</option>
+                                            <option value="Physics">Physics</option>
+                                            <option value="Chemistry">Chemistry</option>
+                                            <option value="Biology">Biology</option>
+                                            <option value="English">English</option>
+                                            <option value="Literature">Literature</option>
+                                            <option value="Economics">Economics</option>
+                                            <option value="Government">Government</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="topicInput">Topic</label>
+                                        <input type="text" id="topicInput" class="form-control" placeholder="e.g., Quadratic Equations" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="questionInput">Your Question</label>
+                                    <textarea id="questionInput" class="form-control" placeholder="Ask your question here..." required></textarea>
+                                </div>
+                                
+                                <div class="chat-actions">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-paper-plane"></i>
+                                        Ask Question
+                                    </button>
+                                    <button type="button" onclick="generatePracticeQuestions()" class="btn btn-outline">
+                                        <i class="fas fa-lightbulb"></i>
+                                        Generate Practice Questions
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quiz Section -->
+        <section id="quiz" class="quiz-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Interactive Quizzes</h2>
+                    <p class="section-subtitle">Test your knowledge with WAEC, JAMB, and international standard questions</p>
+                </div>
+                
+                <div class="quiz-container">
+                    <div class="quiz-setup">
+                        <h3>Create Your Quiz</h3>
+                        <p>Generate personalized quizzes based on your subjects and topics</p>
+                        
+                        <div class="quiz-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="quizSubject">Subject</label>
+                                    <select id="quizSubject" class="form-control">
+                                        <option value="">Select Subject</option>
+                                        <option value="Mathematics">Mathematics</option>
+                                        <option value="Physics">Physics</option>
+                                        <option value="Chemistry">Chemistry</option>
+                                        <option value="Biology">Biology</option>
+                                        <option value="English">English</option>
+                                        <option value="Literature">Literature</option>
+                                        <option value="Economics">Economics</option>
+                                        <option value="Government">Government</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="quizTopic">Topic</label>
+                                    <input type="text" id="quizTopic" class="form-control" placeholder="e.g., Quadratic Equations, Force and Motion">
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="quizDifficulty">Difficulty</label>
+                                    <select id="quizDifficulty" class="form-control">
+                                        <option value="easy">Easy</option>
+                                        <option value="medium" selected>Medium</option>
+                                        <option value="hard">Hard</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="quizExamType">Exam Type</label>
+                                    <select id="quizExamType" class="form-control">
+                                        <option value="WAEC">WAEC</option>
+                                        <option value="JAMB">JAMB</option>
+                                        <option value="NECO">NECO</option>
+                                        <option value="IGCSE">IGCSE</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="quizQuestions">Number of Questions</label>
+                                    <select id="quizQuestions" class="form-control">
+                                        <option value="5">5 Questions</option>
+                                        <option value="10" selected>10 Questions</option>
+                                        <option value="15">15 Questions</option>
+                                        <option value="20">20 Questions</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <button id="generateQuizBtn" class="btn btn-primary btn-full" onclick="console.log('Button clicked via onclick');">
+                                        <i class="fas fa-magic"></i>
+                                        Generate Quiz
+                                    </button>
+                                    <button type="button" class="btn btn-outline" onclick="testQuizSystem()" style="margin-top: 10px;">
+                                        Test Quiz System
+                                    </button>
+                                    <button type="button" class="btn btn-outline" onclick="testGenerateQuiz()" style="margin-top: 10px;">
+                                        Test Generate Button
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="quizInterface" class="quiz-interface" style="display: none;">
+                        <div class="quiz-header">
+                            <div class="quiz-info">
+                                <h3 id="quizTitle">Quiz Title</h3>
+                                <div class="quiz-meta">
+                                    <span id="quizProgress">Question 1 of 10</span>
+                                    <span id="quizTimer">Time: 30:00</span>
+                                </div>
+                            </div>
+                            <div class="quiz-actions">
+                                <button id="submitQuizBtn" class="btn btn-primary">
+                                    <i class="fas fa-check"></i>
+                                    Submit Quiz
+                                </button>
+                                <button id="exitQuizBtn" class="btn btn-outline">
+                                    <i class="fas fa-times"></i>
+                                    Exit
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div id="quizContent" class="quiz-content">
+                            <div id="questionContainer" class="question-container">
+                                <h4 id="questionText">Question text will appear here</h4>
+                                <div id="questionOptions" class="question-options">
+                                    <!-- Options will be populated dynamically -->
+                                </div>
+                            </div>
+                            
+                            <div class="quiz-navigation">
+                                <button id="prevQuestionBtn" class="btn btn-outline">
+                                    <i class="fas fa-chevron-left"></i>
+                                    Previous
+                                </button>
+                                <div class="question-indicators" id="questionIndicators">
+                                    <!-- Question indicators will be populated dynamically -->
+                                </div>
+                                <button id="nextQuestionBtn" class="btn btn-outline">
+                                    Next
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="quizResults" class="quiz-results" style="display: none;">
+                        <div class="results-header">
+                            <h3>Quiz Results</h3>
+                            <div class="score-display">
+                                <div class="score-circle">
+                                    <span id="scorePercentage">85%</span>
+                                </div>
+                                <div class="score-details">
+                                    <p>You got <span id="correctAnswers">8</span> out of <span id="totalQuestions">10</span> questions correct!</p>
+                                    <p id="passStatus" class="pass-status">Congratulations! You passed!</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="results-details">
+                            <h4>Detailed Results</h4>
+                            <div id="detailedResults" class="detailed-results">
+                                <!-- Detailed results will be populated dynamically -->
+                            </div>
+                        </div>
+                        
+                        <div class="results-actions">
+                            <button id="retakeQuizBtn" class="btn btn-primary">
+                                <i class="fas fa-redo"></i>
+                                Retake Quiz
+                            </button>
+                            <button id="newQuizBtn" class="btn btn-outline">
+                                <i class="fas fa-plus"></i>
+                                Create New Quiz
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Study Groups Section -->
+        <section id="studyGroups" class="study-groups">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Study Groups</h2>
+                    <p class="section-subtitle">Collaborate with peers and enhance your learning experience</p>
+                </div>
+                
+                <div class="groups-container">
+                    <div class="groups-sidebar">
+                        <div class="create-group-form">
+                            <h3>Create New Group</h3>
+                            <form id="createGroupForm">
+                                <div class="form-group">
+                                    <label for="groupName">Group Name</label>
+                                    <input type="text" id="groupName" name="groupName" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="description">Description</label>
+                                    <textarea id="description" name="description" class="form-control" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="subject">Subject</label>
+                                    <select id="subject" name="subject" class="form-control" required>
+                                        <option value="">Select Subject</option>
+                                        <option value="Mathematics">Mathematics</option>
+                                        <option value="Physics">Physics</option>
+                                        <option value="Chemistry">Chemistry</option>
+                                        <option value="Biology">Biology</option>
+                                        <option value="English">English</option>
+                                        <option value="Literature">Literature</option>
+                                        <option value="Economics">Economics</option>
+                                        <option value="Government">Government</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="topic">Topic</label>
+                                    <input type="text" id="topic" name="topic" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="maxMembers">Max Members</label>
+                                    <input type="number" id="maxMembers" name="maxMembers" class="form-control" min="2" max="50" value="10">
+                                </div>
+                                <div class="form-group">
+                                    <label for="isPublic">Public Group</label>
+                                    <select id="isPublic" name="isPublic" class="form-control">
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Create Group</button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <div class="groups-main">
+                        <div id="groupsSection">
+                            <h3>Available Groups</h3>
+                            <div id="groupsContainer" class="groups-grid">
+                                <!-- Groups will be populated dynamically -->
+                            </div>
+                        </div>
+                        
+                        <div id="groupDetailsContainer" class="group-details-container" style="display: none;">
+                            <!-- Group details will be populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="dashboard">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Dashboard</h2>
+                    <p class="section-subtitle">Track your progress and manage your learning journey</p>
+                </div>
+                
+                <div class="dashboard-container">
+                    <div class="dashboard-sidebar">
+                        <div class="dashboard-nav">
+                            <button class="tab-btn active" data-tab="overview">Overview</button>
+                            <button class="tab-btn" data-tab="progress">Progress</button>
+                            <button class="tab-btn" data-tab="activity">Activity</button>
+                            <button class="tab-btn" data-tab="achievements">Achievements</button>
+                            <button class="tab-btn" data-tab="profile">Profile</button>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-main">
+                        <div id="overviewTab" class="tab-content active">
+                            <div id="userInfoContainer" class="user-info-container">
+                                <!-- User info will be populated dynamically -->
+                            </div>
+                            <div id="statsContainer" class="stats-container">
+                                <!-- Stats will be populated dynamically -->
+                            </div>
+                        </div>
+                        
+                        <div id="progressTab" class="tab-content">
+                            <div id="progressContainer" class="progress-container">
+                                <!-- Progress will be populated dynamically -->
+                            </div>
+                        </div>
+                        
+                        <div id="activityTab" class="tab-content">
+                            <div id="recentActivityContainer" class="activity-container">
+                                <!-- Recent activity will be populated dynamically -->
+                            </div>
+                        </div>
+                        
+                        <div id="achievementsTab" class="tab-content">
+                            <div id="achievementsContainer" class="achievements-container">
+                                <!-- Achievements will be populated dynamically -->
+                            </div>
+                        </div>
+                        
+                        <div id="profileTab" class="tab-content">
+                            <div class="profile-section">
+                                <div id="profileContainer" class="profile-container">
+                                    <!-- Profile info will be populated dynamically -->
+                                </div>
+                                
+                                <div class="profile-forms">
+                                    <div class="profile-form">
+                                        <h3>Update Profile</h3>
+                                        <form id="profileForm">
+                                            <div class="form-group">
+                                                <label for="fullName">Full Name</label>
+                                                <input type="text" id="fullName" name="fullName" class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="gradeLevel">Grade Level</label>
+                                                <select id="gradeLevel" name="gradeLevel" class="form-control">
+                                                    <option value="">Select Grade</option>
+                                                    <option value="SS1">SS1</option>
+                                                    <option value="SS2">SS2</option>
+                                                    <option value="SS3">SS3</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="subjects">Subjects (comma-separated)</label>
+                                                <input type="text" id="subjects" name="subjects" class="form-control" placeholder="Mathematics, Physics, Chemistry">
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Update Profile</button>
+                                        </form>
+                                    </div>
+                                    
+                                    <div class="password-form">
+                                        <h3>Change Password</h3>
+                                        <form id="passwordForm">
+                                            <div class="form-group">
+                                                <label for="currentPassword">Current Password</label>
+                                                <input type="password" id="currentPassword" name="currentPassword" class="form-control" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="newPassword">New Password</label>
+                                                <input type="password" id="newPassword" name="newPassword" class="form-control" required>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Change Password</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Tutor Section (for logged-in users) -->
+        <section id="chat" class="chat-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">AI Tutor</h2>
+                    <p class="section-subtitle">Your personal AI tutor available 24/7</p>
+                </div>
+                
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <div class="chat-status">
+                            <div class="status-dot"></div>
+                            <span>AI Tutor Online</span>
+                        </div>
+                        <h3>Ask Your Questions</h3>
+                    </div>
+                    
+                    <div id="chatContainer" class="chat-content">
+                        <div class="chat-messages" id="chatMessages">
+                            <!-- Messages will appear here -->
+                    </div>
+                        
+                        <form id="chatForm" class="chat-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="subjectSelect">Subject</label>
+                                    <select id="subjectSelect" class="form-control" required>
+                                        <option value="">Select Subject</option>
+                                        <option value="Mathematics">Mathematics</option>
+                                        <option value="Physics">Physics</option>
+                                        <option value="Chemistry">Chemistry</option>
+                                        <option value="Biology">Biology</option>
+                            <option value="English">English</option>
+                                        <option value="Literature">Literature</option>
+                                        <option value="Economics">Economics</option>
+                                        <option value="Government">Government</option>
+                        </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="topicInput">Topic</label>
+                                    <input type="text" id="topicInput" class="form-control" placeholder="e.g., Quadratic Equations" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="questionInput">Your Question</label>
+                                <textarea id="questionInput" class="form-control" placeholder="Ask your question here..." required></textarea>
+                            </div>
+                            
+                            <div class="chat-actions">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-paper-plane"></i>
+                                    Ask Question
+                                </button>
+                                <button type="button" onclick="generatePracticeQuestions()" class="btn btn-outline">
+                                    <i class="fas fa-lightbulb"></i>
+                                    Generate Practice Questions
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta">
+            <div class="container">
+                <div class="cta-content">
+                    <h2>Ready to Transform Your Learning?</h2>
+                    <p>Join thousands of Nigerian students who are already experiencing the future of education.</p>
+                    <div class="cta-actions">
+                        <button onclick="showSignup()" class="btn btn-primary btn-large">
+                            <i class="fas fa-rocket"></i>
+                            Start Free Trial
+                        </button>
+                        <button onclick="scrollToDemo()" class="btn btn-outline btn-large">
+                            <i class="fas fa-play"></i>
+                            Watch Demo
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="modal-header">
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('login')">Login</button>
+                <button class="tab-btn" onclick="switchTab('signup')">Sign Up</button>
+                </div>
+            </div>
+            
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Login</button>
+            </form>
+            
+            <form id="signupForm" class="auth-form hidden">
+                <div class="form-group">
+                    <label for="signupName">Full Name</label>
+                    <input type="text" id="signupName" class="form-control" placeholder="Full Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupUsername">Username</label>
+                    <input type="text" id="signupUsername" class="form-control" placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupGrade">Grade Level</label>
+                    <select id="signupGrade" class="form-control" required>
+                        <option value="">Select Grade</option>
+                        <option value="SS1">SS1</option>
+                        <option value="SS2">SS2</option>
+                        <option value="SS3">SS3</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Sign Up</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <img src="images/logo.svg" alt="AI Tutor Pro Logo" class="footer-logo">
+                    </div>
+                    <p>Revolutionizing education through AI-powered personalized learning for Nigerian students.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#testimonials">Success Stories</a></li>
+                        <li><a href="#demo">Demo</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="mailto:support@aitutorpro.com">support@aitutorpro.com</a></li>
+                        <li><a href="tel:+2341234567890">+234 123 456 7890</a></li>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Newsletter</h3>
+                    <p>Stay updated with the latest features and educational tips.</p>
+                    <div class="newsletter-form">
+                        <input type="email" placeholder="Enter your email">
+                        <button class="btn btn-primary">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 AI Tutor Pro. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script type="module" src="assets/js/app.js"></script>
+    <script src="assets/js/quiz.js"></script>
+</body>
+</html>
