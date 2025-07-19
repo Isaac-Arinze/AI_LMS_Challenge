@@ -91,25 +91,20 @@ def demo_ask_question():
 @ai_tutor_bp.route('/demo/practice', methods=['POST'])
 def demo_generate_practice():
     """Public endpoint for practice questions demo - no authentication required"""
-    
     try:
         data = request.get_json()
-        
-        # Validate input
         if 'subject' not in data or 'topic' not in data:
             return jsonify({'error': 'Subject and topic are required'}), 400
-        
         difficulty = data.get('difficulty', 'medium')
         exam_type = data.get('exam_type')
-        
-        # Generate practice questions
-        questions = ai_service.generate_practice_questions(
+        num_questions = data.get('num_questions', 3)
+        questions = ai_service.generate_questions(
             subject=data['subject'],
             topic=data['topic'],
             difficulty=difficulty,
+            num_questions=num_questions,
             exam_type=exam_type
         )
-        
         return jsonify({
             'success': True,
             'questions': questions,
@@ -118,7 +113,6 @@ def demo_generate_practice():
             'difficulty': difficulty,
             'exam_type': exam_type
         })
-    
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -126,25 +120,20 @@ def demo_generate_practice():
 @jwt_required()
 def generate_practice():
     """Generate practice questions for a topic"""
-    
     try:
         data = request.get_json()
-        
-        # Validate input
         if 'subject' not in data or 'topic' not in data:
             return jsonify({'error': 'Subject and topic are required'}), 400
-        
         difficulty = data.get('difficulty', 'medium')
         exam_type = data.get('exam_type')
-        
-        # Generate practice questions
-        questions = ai_service.generate_practice_questions(
+        num_questions = data.get('num_questions', 3)
+        questions = ai_service.generate_questions(
             subject=data['subject'],
             topic=data['topic'],
             difficulty=difficulty,
+            num_questions=num_questions,
             exam_type=exam_type
         )
-        
         return jsonify({
             'success': True,
             'questions': questions,
@@ -153,7 +142,6 @@ def generate_practice():
             'difficulty': difficulty,
             'exam_type': exam_type
         })
-    
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

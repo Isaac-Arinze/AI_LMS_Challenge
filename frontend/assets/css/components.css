@@ -189,15 +189,50 @@
 .chat-container {
     display: flex;
     flex-direction: column;
-    height: 600px;
-    max-height: 80vh;
+    min-height: 1200px;
+    max-height: 99vh;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
     border-radius: 20px;
-    overflow: hidden;
+    overflow-y: auto;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);
     position: relative;
+    padding: 24px 24px 16px 24px;
+}
+
+.input-toggle-bottom {
+    margin-top: 32px;
+    align-self: flex-end;
+    z-index: 2;
+}
+
+@media (max-width: 1300px) {
+    .chat-container {
+        max-width: 98vw;
+    }
+    .container {
+        max-width: 100vw;
+    }
+}
+
+@media (max-width: 900px) {
+    .chat-container {
+        min-height: 700px;
+        max-height: 90vh;
+        padding: 12px 4px 8px 4px;
+    }
+}
+
+@media (max-width: 600px) {
+    .chat-container {
+        min-height: 400px;
+        max-height: 80vh;
+        padding: 4px;
+    }
 }
 
 .chat-header {
@@ -492,29 +527,39 @@
 /* Rating Styles */
 .rating-buttons {
     display: flex;
-    gap: 8px;
-    margin-top: 15px;
+    gap: 24px;
+    margin-top: 18px;
     justify-content: center;
 }
 
 .rating-btn {
-    background: none;
-    border: 2px solid rgba(0, 0, 0, 0.1);
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    font-size: 1.2rem;
+    background: #3a4ca8;
+    border: none;
+    border-radius: 24px;
+    min-width: 120px;
+    padding: 14px 20px;
+    font-size: 1.1rem;
+    color: #fff;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: background 0.2s, transform 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 8px;
+    box-shadow: 0 2px 8px rgba(60, 80, 180, 0.10);
 }
 
 .rating-btn:hover {
-    transform: scale(1.1);
-    border-color: var(--primary-color);
-    background: rgba(74, 107, 255, 0.1);
+    background: #25337a;
+    transform: translateY(-2px) scale(1.04);
+}
+
+.rating-container p {
+    color: #3a4ca8;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
 }
 
 /* Quiz Section Styles */
@@ -2295,22 +2340,39 @@ section#cta {
 
 .rating-buttons {
     display: flex;
-    gap: 10px;
+    gap: 24px;
+    margin-top: 18px;
+    justify-content: center;
 }
 
 .rating-btn {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: white;
-    padding: 8px 12px;
-    border-radius: 20px;
+    background: #3a4ca8;
+    border: none;
+    border-radius: 24px;
+    min-width: 120px;
+    padding: 14px 20px;
+    font-size: 1.1rem;
+    color: #fff;
+    font-weight: 600;
     cursor: pointer;
-    font-size: 12px;
-    transition: all 0.3s ease;
+    transition: background 0.2s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 2px 8px rgba(60, 80, 180, 0.10);
 }
 
 .rating-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: #25337a;
+    transform: translateY(-2px) scale(1.04);
+}
+
+.rating-container p {
+    color: #3a4ca8;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
 }
 
 .practice-questions {
@@ -2880,4 +2942,53 @@ input::placeholder, textarea::placeholder {
     white-space: nowrap;
     min-width: 100px;
     padding: 0.5rem 1.2rem;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+@media (max-width: 1300px) {
+    .chat-container {
+        max-width: 98vw;
+    }
+    .container {
+        max-width: 100vw;
+    }
+}
+
+@media (max-width: 900px) {
+    .chat-container {
+        min-height: 500px;
+        max-height: 80vh;
+        padding: 12px 4px 8px 4px;
+    }
+}
+
+@media (max-width: 600px) {
+    .chat-container {
+        min-height: 350px;
+        max-height: 70vh;
+        padding: 4px;
+    }
+}
+
+.spinner-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 2px;
+    background: #4a6bff;
+    border-radius: 50%;
+    animation: spinner-bounce 1.2s infinite ease-in-out both;
+}
+.spinner-dot:nth-child(1) { animation-delay: 0s; }
+.spinner-dot:nth-child(2) { animation-delay: 0.2s; }
+.spinner-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes spinner-bounce {
+    0%, 80%, 100% { transform: scale(0.7); opacity: 0.5; }
+    40% { transform: scale(1.2); opacity: 1; }
 }

@@ -67,6 +67,10 @@ function setupChatInterface() {
     
     // Add global function for onclick handlers
     window.generatePracticeQuestions = generatePracticeQuestions;
+    window.generatePracticeQuestionsFromSelector = function() {
+        const num = parseInt(document.getElementById('practiceNumQuestions')?.value) || 5;
+        generatePracticeQuestions(num);
+    };
     
     // Add welcome message
     if (chatMessages && chatMessages.children.length === 0) {
@@ -110,21 +114,7 @@ function setupChatToggle() {
 }
 
 function setupPracticeQuestionsButton() {
-    const practiceBtn = document.querySelector('button[onclick="generatePracticeQuestions()"]') ||
-                       document.querySelector('button[onclick*="generatePracticeQuestions"]');
-    
-    if (practiceBtn) {
-        console.log('Found practice questions button');
-        practiceBtn.removeAttribute('onclick');
-        practiceBtn.addEventListener('click', async (e) => {
-            console.log('Practice questions button clicked');
-            e.preventDefault();
-            e.stopPropagation();
-            await generatePracticeQuestions();
-        });
-    } else {
-        console.log('Practice questions button not found');
-    }
+    // No-op: handled by the new selector/button
 }
 
 async function sendQuestion() {
@@ -151,14 +141,11 @@ async function sendQuestion() {
         return;
     }
     
-    // Add user message to chat
     addMessage('user', question);
     
-    // Clear input
     questionInput.value = '';
     
-    // Show loading message
-    const loadingId = addMessage('bot', 'Thinking...', true);
+    const loadingElem = addMessage('bot', 'Thinking...', true);
     
     try {
         const token = localStorage.getItem('token') || localStorage.getItem('authToken') || localStorage.getItem('auth_token');
@@ -189,22 +176,19 @@ async function sendQuestion() {
         const data = await response.json();
         console.log('AI response:', data);
         
-        // Remove loading message
-        removeMessage(loadingId);
+        removeMessage(loadingElem);
         
         if (response.ok) {
-            addMessage('bot', data.response);
+            const botElem = addMessage('bot', data.response);
             
             // Add rating buttons only for authenticated users
-            if (token && data.session_id) {
-                addRatingButtons(data.session_id);
-            }
+            addRatingButtons(data.session_id);
         } else {
             addMessage('bot', `Sorry, I encountered an error: ${data.error || 'Unknown error'}. Please try again.`);
         }
     } catch (error) {
         console.error('Error sending question:', error);
-        removeMessage(loadingId);
+        removeMessage(loadingElem);
         addMessage('bot', 'Sorry, I encountered an error. Please check your connection and try again.');
     }
 }
@@ -212,17 +196,18 @@ async function sendQuestion() {
 function addMessage(sender, message, isLoading = false) {
     const chatMessages = document.getElementById('chatMessages');
     if (!chatMessages) return null;
-    
+    // Remove any existing spinner before adding a new message
+    Array.from(chatMessages.querySelectorAll('.loading-spinner')).forEach(spinner => spinner.parentElement?.parentElement?.remove());
     const messageDiv = document.createElement('div');
     messageDiv.className = `message ${sender}-message`;
-    
     if (isLoading) {
         messageDiv.innerHTML = `
             <div class="message-content">
-                <div class="loading-dots">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+                <div class="loading-spinner" style="display: flex; align-items: center; gap: 8px;">
+                    <span class="spinner-dot"></span>
+                    <span class="spinner-dot"></span>
+                    <span class="spinner-dot"></span>
+                    <span style="font-size: 1.1em; color: #4a6bff; margin-left: 8px;">AI Tutor is thinking…</span>
                 </div>
             </div>
         `;
@@ -233,15 +218,18 @@ function addMessage(sender, message, isLoading = false) {
             </div>
         `;
     }
-    
     chatMessages.appendChild(messageDiv);
     chatMessages.scrollTop = chatMessages.scrollHeight;
-    
-    return messageDiv.id;
+    return messageDiv; // Return the element, not just the ID
 }
 
-function removeMessage(messageId) {
-    const message = document.getElementById(messageId);
+function removeMessage(messageIdOrElem) {
+    let message;
+    if (typeof messageIdOrElem === 'string') {
+        message = document.getElementById(messageIdOrElem);
+    } else {
+        message = messageIdOrElem;
+    }
     if (message) {
         message.remove();
     }
@@ -249,31 +237,52 @@ function removeMessage(messageId) {
 
 function addRatingButtons(sessionId) {
     const chatMessages = document.getElementById('chatMessages');
-    if (!chatMessages || !sessionId) return;
-    
+    if (!chatMessages) return;
+    // Remove any existing rating block
+    Array.from(chatMessages.querySelectorAll('.rating-container')).forEach(rating => rating.remove());
+    // Find the last bot message
+    const botMessages = chatMessages.querySelectorAll('.message.bot-message');
+    const lastBotMessage = botMessages[botMessages.length - 1];
     const ratingDiv = document.createElement('div');
     ratingDiv.className = 'rating-container';
     ratingDiv.innerHTML = `
         <p>Was this explanation helpful?</p>
         <div class="rating-buttons">
-            <button onclick="rateResponse('${sessionId}', 1)" class="rating-btn">
+            <button onclick="window.rateResponseWrapper('${sessionId || ''}', 1)" class="rating-btn">
                 <i class="fas fa-thumbs-down"></i>
                 Not Helpful
             </button>
-            <button onclick="rateResponse('${sessionId}', 3)" class="rating-btn">
+            <button onclick="window.rateResponseWrapper('${sessionId || ''}', 3)" class="rating-btn">
                 <i class="fas fa-thumbs-up"></i>
                 Helpful
             </button>
-            <button onclick="rateResponse('${sessionId}', 5)" class="rating-btn">
+            <button onclick="window.rateResponseWrapper('${sessionId || ''}', 5)" class="rating-btn">
                 <i class="fas fa-star"></i>
                 Very Helpful
             </button>
         </div>
     `;
-    
-    chatMessages.appendChild(ratingDiv);
+    // Insert after the last bot message, or at the end if not found
+    if (lastBotMessage && lastBotMessage.nextSibling) {
+        chatMessages.insertBefore(ratingDiv, lastBotMessage.nextSibling);
+    } else {
+        chatMessages.appendChild(ratingDiv);
+    }
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
+
+window.rateResponseWrapper = function(sessionId, rating) {
+    if (sessionId) {
+        rateResponse(sessionId, rating);
+    } else {
+        showNotification('Thank you for your feedback!', 'success');
+        // Remove rating buttons
+        const ratingContainer = document.querySelector('.rating-container');
+        if (ratingContainer) {
+            ratingContainer.remove();
+        }
+    }
+};
 
 async function rateResponse(sessionId, rating) {
     try {
@@ -303,71 +312,57 @@ async function rateResponse(sessionId, rating) {
     }
 }
 
-async function generatePracticeQuestions() {
+async function generatePracticeQuestions(numQuestions = 5) {
     console.log('generatePracticeQuestions called');
-    
     const subjectSelect = document.getElementById('subjectSelect');
     const topicInput = document.getElementById('topicInput');
-    
+    const genBtn = document.querySelector('button[onclick*="generatePracticeQuestionsFromSelector"]');
     if (!subjectSelect || !topicInput) {
         console.error('Practice form elements not found');
         showNotification('Form elements not found', 'error');
         return;
     }
-    
     const subject = subjectSelect.value;
     const topic = topicInput.value.trim();
-    
-    console.log('Practice question form values:', { subject, topic });
-    
+    console.log('Practice question form values:', { subject, topic, numQuestions });
     if (!subject) {
         showNotification('Please select a subject', 'error');
         return;
     }
-    
     if (!topic) {
         showNotification('Please enter a topic', 'error');
         return;
     }
-    
-    // Add user message to chat window immediately
-    addMessage('user', `Generate practice questions for ${subject}, topic: ${topic}`);
-    
-    // Show loading message
-    const loadingId = addMessage('bot', 'Generating practice questions...', true);
-    
+    // Remove any existing spinner before adding a new one
+    const chatMessages = document.getElementById('chatMessages');
+    if (chatMessages) {
+        Array.from(chatMessages.querySelectorAll('.loading-spinner')).forEach(spinner => spinner.parentElement?.parentElement?.remove());
+    }
+    // Disable the button while loading
+    if (genBtn) genBtn.disabled = true;
+    const loadingId = addMessage('bot', '', true); // Show spinner
     try {
         const token = localStorage.getItem('token') || localStorage.getItem('authToken') || localStorage.getItem('auth_token');
         console.log('Using token for practice questions:', token ? 'Token found' : 'No token');
-        
-        const headers = {
-            'Content-Type': 'application/json'
-        };
-        
-        // Determine which endpoint to use based on authentication
+        const headers = { 'Content-Type': 'application/json' };
         const endpoint = token ? 'http://127.0.0.1:5000/api/ai/practice' : 'http://127.0.0.1:5000/api/ai/demo/practice';
-        
-        if (token) {
-            headers['Authorization'] = `Bearer ${token}`;
-        }
-        
+        if (token) headers['Authorization'] = `Bearer ${token}`;
         console.log('Making API call to practice endpoint:', endpoint);
         const response = await fetch(endpoint, {
             method: 'POST',
             headers: headers,
             body: JSON.stringify({
                 subject: subject,
-                topic: topic
+                topic: topic,
+                num_questions: numQuestions
             })
         });
-        
-        console.log('Practice API response status:', response.status);
         const data = await response.json();
-        console.log('Practice API response data:', data);
-        
-        // Remove loading message
-        removeMessage(loadingId);
-        
+        // Remove all spinners before displaying questions
+        if (chatMessages) {
+            Array.from(chatMessages.querySelectorAll('.loading-spinner')).forEach(spinner => spinner.parentElement?.parentElement?.remove());
+        }
+        if (genBtn) genBtn.disabled = false;
         if (response.ok) {
             displayPracticeQuestions(data.questions);
             showNotification('Practice questions generated successfully!', 'success');
@@ -377,7 +372,11 @@ async function generatePracticeQuestions() {
         }
     } catch (error) {
         console.error('Error generating practice questions:', error);
-        removeMessage(loadingId);
+        // Remove all spinners on error
+        if (chatMessages) {
+            Array.from(chatMessages.querySelectorAll('.loading-spinner')).forEach(spinner => spinner.parentElement?.parentElement?.remove());
+        }
+        if (genBtn) genBtn.disabled = false;
         addMessage('bot', 'Sorry, I encountered an error. Please check your connection and try again.');
         showNotification('Network error generating practice questions', 'error');
     }
@@ -386,27 +385,28 @@ async function generatePracticeQuestions() {
 function displayPracticeQuestions(questions) {
     const chatMessages = document.getElementById('chatMessages');
     if (!chatMessages) return;
-    
     const questionsDiv = document.createElement('div');
     questionsDiv.className = 'practice-questions';
     questionsDiv.innerHTML = `
         <h4>Practice Questions:</h4>
         <div class="questions-list">
-            ${questions.map((q, index) => `
-                <div class="question-item">
-                    <h5>Question ${index + 1}:</h5>
-                    <p>${q.question}</p>
-                    <div class="question-answer" style="display: none;">
-                        <strong>Answer:</strong> ${q.answer}
+            ${questions.map((q, index) => {
+                const explanation = q.explanation ? `<div class='question-explanation'><strong>Explanation:</strong> ${q.explanation}</div>` : `<div class='question-explanation'><em>No explanation provided.</em></div>`;
+                return `
+                    <div class="question-item">
+                        <h5>Question ${index + 1}:</h5>
+                        <p>${q.question}</p>
+                        <div class="question-answer" style="display: none;">
+                            ${explanation}
+                        </div>
+                        <button onclick="toggleAnswer(this)" class="btn btn-small">
+                            Show Answer
+                        </button>
                     </div>
-                    <button onclick="toggleAnswer(this)" class="btn btn-small">
-                        Show Answer
-                    </button>
-                </div>
-            `).join('')}
+                `;
+            }).join('')}
         </div>
     `;
-    
     chatMessages.appendChild(questionsDiv);
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
@@ -457,6 +457,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatSection = document.getElementById('chat');
     if (chatSection && chatSection.style.display !== 'none') {
         initChat();
+    }
+
+    // Add collapsible input form logic
+    const toggleBtn = document.getElementById('toggleInputFormBtn');
+    const inputFormSection = document.getElementById('inputFormSection');
+    if (toggleBtn && inputFormSection) {
+        toggleBtn.addEventListener('click', () => {
+            if (inputFormSection.style.display === 'none') {
+                inputFormSection.style.display = '';
+                toggleBtn.textContent = 'Hide Input Form';
+            } else {
+                inputFormSection.style.display = 'none';
+                toggleBtn.textContent = 'Show Input Form';
+            }
+        });
     }
 });
 

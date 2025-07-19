@@ -623,46 +623,56 @@
                     <div id="chatContainer" class="chat-content">
                         <div class="chat-messages" id="chatMessages">
                             <!-- Messages will appear here -->
-                    </div>
-                        
-                        <form id="chatForm" class="chat-form">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="subjectSelect">Subject</label>
-                                    <select id="subjectSelect" class="form-control" required>
-                                        <option value="">Select Subject</option>
-                                        <option value="Mathematics">Mathematics</option>
-                                        <option value="Physics">Physics</option>
-                                        <option value="Chemistry">Chemistry</option>
-                                        <option value="Biology">Biology</option>
-                            <option value="English">English</option>
-                                        <option value="Literature">Literature</option>
-                                        <option value="Economics">Economics</option>
-                                        <option value="Government">Government</option>
-                        </select>
+                        </div>
+                        <div id="inputFormSection">
+                            <form id="chatForm" class="chat-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="subjectSelect">Subject</label>
+                                        <select id="subjectSelect" class="form-control" required>
+                                            <option value="">Select Subject</option>
+                                            <option value="Mathematics">Mathematics</option>
+                                            <option value="Physics">Physics</option>
+                                            <option value="Chemistry">Chemistry</option>
+                                            <option value="Biology">Biology</option>
+                                            <option value="English">English</option>
+                                            <option value="Literature">Literature</option>
+                                            <option value="Economics">Economics</option>
+                                            <option value="Government">Government</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="topicInput">Topic</label>
+                                        <input type="text" id="topicInput" class="form-control" placeholder="e.g., Quadratic Equations" required>
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="topicInput">Topic</label>
-                                    <input type="text" id="topicInput" class="form-control" placeholder="e.g., Quadratic Equations" required>
+                                    <label for="questionInput">Your Question</label>
+                                    <textarea id="questionInput" class="form-control" placeholder="Ask your question here..." required></textarea>
                                 </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="questionInput">Your Question</label>
-                                <textarea id="questionInput" class="form-control" placeholder="Ask your question here..." required></textarea>
-                            </div>
-                            
-                            <div class="chat-actions">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-paper-plane"></i>
-                                    Ask Question
-                                </button>
-                                <button type="button" onclick="generatePracticeQuestions()" class="btn btn-outline">
-                                    <i class="fas fa-lightbulb"></i>
-                                    Generate Practice Questions
-                                </button>
-                            </div>
-                        </form>
+                                <div class="form-row" style="display: flex; justify-content: center; margin-top: 10px;">
+                                    <button type="submit" class="btn btn-primary" style="min-width: 180px;">
+                                        <i class="fas fa-paper-plane"></i>
+                                        Ask Question
+                                    </button>
+                                </div>
+                                <div class="form-row" style="display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 10px;">
+                                    <label for="practiceNumQuestions" style="margin: 0; font-weight: 500;">Number of Questions:</label>
+                                    <select id="practiceNumQuestions" class="form-control" style="width: 80px;">
+                                        <option value="5" selected>5</option>
+                                        <option value="10">10</option>
+                                        <option value="20">20</option>
+                                    </select>
+                                    <button type="button" class="btn btn-outline" onclick="generatePracticeQuestionsFromSelector()">
+                                        <i class="fas fa-lightbulb"></i>
+                                        Generate Practice Questions
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <div style="display: flex; justify-content: center; margin-top: 24px;">
+                            <button id="toggleInputFormBtn" class="btn btn-outline input-toggle-bottom" type="button">Hide Input Form</button>
+                        </div>
                     </div>
                 </div>
             </div>

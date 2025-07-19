@@ -117,15 +117,34 @@ class QuizSystem {
         }
     }
     
+    async testGeminiBackend(subject, topic, difficulty = 'medium', numQuestions = 5, examType = 'WAEC') {
+        // Test the Gemini backend endpoint directly
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/quiz/test_gemini', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ subject, topic, difficulty, num_questions: numQuestions, exam_type: examType })
+            });
+            const data = await response.json();
+            if (response.ok) {
+                console.log('Gemini backend test questions:', data.questions);
+                this.showMessage('Gemini backend test successful! Check console for questions.', 'success');
+            } else {
+                this.showMessage(data.error || 'Gemini backend test failed', 'error');
+            }
+        } catch (error) {
+            console.error('Error testing Gemini backend:', error);
+            this.showMessage('Error testing Gemini backend. See console.', 'error');
+        }
+    }
+
     async generateQuiz(params) {
         console.log('generateQuiz method called');
-        
         if (!this.isAuthenticated) {
             console.log('User not authenticated');
             this.showMessage('Please login to generate quizzes', 'error');
             return;
         }
-        
         let subject, topic, difficulty, examType, numQuestions;
         if (params) {
             ({ subject, topic, difficulty, examType, numQuestions } = params);
@@ -134,24 +153,17 @@ class QuizSystem {
             topic = document.getElementById('quizTopic').value;
             difficulty = document.getElementById('quizDifficulty').value;
             examType = document.getElementById('quizExamType').value;
-            numQuestions = parseInt(document.getElementById('quizQuestions').value);
+            numQuestions = parseInt(document.getElementById('quizQuestions')?.value) || 5;
         }
-        
         console.log('Form values:', { subject, topic, difficulty, examType, numQuestions });
-        
         if (!subject || !topic) {
             console.log('Missing subject or topic');
             this.showMessage('Please select a subject and enter a topic', 'error');
             return;
         }
-        
-        console.log('Showing loading...');
         this.showLoading('Generating quiz questions...');
-        
         try {
             const token = localStorage.getItem('token') || localStorage.getItem('authToken') || localStorage.getItem('auth_token');
-            console.log('Using token for API call:', token ? 'Token found' : 'No token');
-            
             const response = await fetch('http://127.0.0.1:5000/api/quiz/generate', {
                 method: 'POST',
                 headers: {
@@ -166,9 +178,7 @@ class QuizSystem {
                     num_questions: numQuestions
                 })
             });
-            
             const data = await response.json();
-            
             if (response.ok) {
                 this.currentQuiz = data.quiz;
                 this.startQuiz();
