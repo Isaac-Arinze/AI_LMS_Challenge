@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ai-learning-assistant-config
+  namespace: ai-learning-assistant
+data:
+  FLASK_ENV: "development"
+  FLASK_DEBUG: "True"
+  MONGO_DATABASE: "learning_assistant"
+  MONGO_HOST: "mongodb-service"
+  MONGO_PORT: "27017"
+  MONGO_USERNAME: "admin"
+  # Note: Password is stored in Secret 

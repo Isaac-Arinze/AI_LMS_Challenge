@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: ai-learning-assistant
+  labels:
+    app: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: your-registry/ai-learning-assistant-backend:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5000
+        env:
+        - name: FLASK_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: ai-learning-assistant-config
+              key: FLASK_ENV
+        - name: FLASK_DEBUG
+          valueFrom:
+            configMapKeyRef:
+              name: ai-learning-assistant-config
+              key: FLASK_DEBUG
+        - name: MONGO_URI
+          value: "mongodb://$(MONGO_USERNAME):$(MONGO_PASSWORD)@mongodb-service:27017/$(MONGO_DATABASE)?authSource=admin"
+        - name: MONGO_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: ai-learning-assistant-config
+              key: MONGO_USERNAME
+        - name: MONGO_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ai-learning-assistant-secrets
+              key: MONGO_PASSWORD
+        - name: MONGO_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: ai-learning-assistant-config
+              key: MONGO_DATABASE
+        - name: JWT_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: ai-learning-assistant-secrets
+              key: JWT_SECRET_KEY
+        - name: GEMINI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: ai-learning-assistant-secrets
+              key: GEMINI_API_KEY
+        - name: MAIL_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: ai-learning-assistant-secrets
+              key: MAIL_USERNAME
+        - name: MAIL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ai-learning-assistant-secrets
+              key: MAIL_PASSWORD
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3 

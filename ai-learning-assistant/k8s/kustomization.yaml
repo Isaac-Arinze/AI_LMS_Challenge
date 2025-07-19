@@ -1,0 +1,26 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ai-learning-assistant
+
+resources:
+  - namespace.yaml
+  - configmap.yaml
+  - secret.yaml
+  - mongodb-persistent-volume.yaml
+  - mongodb-deployment.yaml
+  - backend-deployment.yaml
+  - frontend-deployment.yaml
+  - services.yaml
+  - ingress.yaml
+  - hpa.yaml
+
+commonLabels:
+  app: ai-learning-assistant
+  version: v1.0.0
+
+images:
+  - name: ai-learning-assistant-backend
+    newTag: latest
+  - name: nginx
+    newTag: alpine 

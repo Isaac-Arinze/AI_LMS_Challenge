@@ -1,6 +1,7 @@
 import os
 from typing import Dict, List, Optional
 import google.generativeai as genai
+import re
 
 # Configure Gemini API
 genai.configure(api_key=os.getenv('GEMINI_API_KEY'))
@@ -17,25 +18,46 @@ class AITutorService:
         
         try:
             response = self.model.generate_content(prompt)
-            return response.text.strip()
+            text = response.text.strip()
+            # Remove asterisks only at the start/end of lines and markdown headers
+            text_clean = re.sub(r'^\*+|\*+$', '', text, flags=re.MULTILINE)
+            text_clean = re.sub(r'^#+', '', text_clean, flags=re.MULTILINE)
+            text_clean = text_clean.strip()
+            # If cleaning removed everything, fall back to original
+            if not text_clean:
+                text_clean = text
+            return text_clean
         
         except Exception as e:
             return f"Error: {str(e)}"
     
-    def generate_practice_questions(self, subject: str, topic: str, difficulty: str = "medium") -> List[Dict]:
+    def generate_practice_questions(self, subject: str, topic: str, difficulty: str = "medium", exam_type: Optional[str] = None) -> List[Dict]:
         """Generate practice questions for a given topic"""
         
-        prompt = f"""
-        Generate 3 practice questions for a Nigerian student studying {subject}, specifically on the topic of {topic}.
-        Difficulty level: {difficulty}
-        
-        Format each question as:
-        Question: [question text]
-        Answer: [correct answer]
-        Explanation: [brief explanation]
-        
-        Make questions relevant to Nigerian context where possible.
-        """
+        if exam_type:
+            prompt = f"""
+            Generate 3 practice questions based on {exam_type} standards for a Nigerian student studying {subject}, specifically on the topic of {topic}.
+            Difficulty level: {difficulty}
+            
+            Format each question as:
+            Question: [question text]
+            Answer: [correct answer]
+            Explanation: [brief explanation]
+            
+            Make questions relevant to Nigerian context where possible.
+            """
+        else:
+            prompt = f"""
+            Generate 3 practice questions for a Nigerian student studying {subject}, specifically on the topic of {topic}.
+            Difficulty level: {difficulty}
+            
+            Format each question as:
+            Question: [question text]
+            Answer: [correct answer]
+            Explanation: [brief explanation]
+            
+            Make questions relevant to Nigerian context where possible.
+            """
         
         try:
             response = self.model.generate_content(prompt)
@@ -58,10 +80,7 @@ class AITutorService:
         Student's Question: {question}
         
         Please provide a clear, step-by-step explanation {grade_context}. 
-        Use simple language and include relevant examples from Nigerian context where appropriate.
-        If this is a math problem, show the working steps.
-        If this is a science concept, use everyday examples to explain.
-        Keep your response encouraging and supportive.
+        Use simple language. Focus on the calculation and final answer. Answer concisely in 2-4 sentences. Do not include extra examples or encouragement.
         """
     
     def _parse_questions_response(self, response: str) -> List[Dict]:

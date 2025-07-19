@@ -70,16 +70,7 @@ function setupChatInterface() {
     
     // Add welcome message
     if (chatMessages && chatMessages.children.length === 0) {
-        addMessage('bot', `Hello! I'm your AI tutor, designed to help students from around the world excel in their studies. 🌍📚
-
-I can help you with:
-• Mathematics, Physics, Chemistry, Biology
-• English, Literature, Economics, Government
-• Step-by-step explanations and problem solving
-• Practice questions tailored to your level
-• Nigerian curriculum and international standards
-
-What subject would you like to explore today?`);
+        addMessage('bot', `Hello, welcome to AI Tutor chat! What would you like to learn today?`);
     }
 }
 
@@ -338,6 +329,9 @@ async function generatePracticeQuestions() {
         showNotification('Please enter a topic', 'error');
         return;
     }
+    
+    // Add user message to chat window immediately
+    addMessage('user', `Generate practice questions for ${subject}, topic: ${topic}`);
     
     // Show loading message
     const loadingId = addMessage('bot', 'Generating practice questions...', true);

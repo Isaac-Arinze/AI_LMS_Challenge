@@ -8,6 +8,7 @@ class QuizSystem {
         this.timer = null;
         this.timeRemaining = 0;
         this.isAuthenticated = false;
+        this.lastQuizParams = null;
         
         this.initializeEventListeners();
         this.checkAuthentication();
@@ -116,7 +117,7 @@ class QuizSystem {
         }
     }
     
-    async generateQuiz() {
+    async generateQuiz(params) {
         console.log('generateQuiz method called');
         
         if (!this.isAuthenticated) {
@@ -125,11 +126,16 @@ class QuizSystem {
             return;
         }
         
-        const subject = document.getElementById('quizSubject').value;
-        const topic = document.getElementById('quizTopic').value;
-        const difficulty = document.getElementById('quizDifficulty').value;
-        const examType = document.getElementById('quizExamType').value;
-        const numQuestions = parseInt(document.getElementById('quizQuestions').value);
+        let subject, topic, difficulty, examType, numQuestions;
+        if (params) {
+            ({ subject, topic, difficulty, examType, numQuestions } = params);
+        } else {
+            subject = document.getElementById('quizSubject').value;
+            topic = document.getElementById('quizTopic').value;
+            difficulty = document.getElementById('quizDifficulty').value;
+            examType = document.getElementById('quizExamType').value;
+            numQuestions = parseInt(document.getElementById('quizQuestions').value);
+        }
         
         console.log('Form values:', { subject, topic, difficulty, examType, numQuestions });
         
@@ -173,6 +179,7 @@ class QuizSystem {
             console.error('Error generating quiz:', error);
             this.showMessage('Failed to generate quiz. Please try again.', 'error');
         }
+        this.lastQuizParams = { subject, topic, difficulty, examType, numQuestions };
     }
     
     async startQuiz() {
@@ -237,34 +244,34 @@ class QuizSystem {
     
     displayQuestion(index) {
         if (index < 0 || index >= this.currentQuiz.questions.length) return;
-        
         this.currentQuestionIndex = index;
         const question = this.currentQuiz.questions[index];
-        
-        document.getElementById('questionText').textContent = question.question;
-        
+        // Display exam type and year if available
+        const questionTextElem = document.getElementById('questionText');
+        let meta = '';
+        if (question.exam_type || question.exam_year) {
+            meta = `<div class="exam-meta" style="font-size:1.1em;color:#3a4ca8;margin-bottom:0.5em;">
+                ${question.exam_type ? question.exam_type : ''} ${question.exam_year ? question.exam_year : ''}
+            </div>`;
+        }
+        questionTextElem.innerHTML = `${meta}<span>${question.question}</span>`;
         const optionsContainer = document.getElementById('questionOptions');
         optionsContainer.innerHTML = '';
-        
         Object.entries(question.options).forEach(([letter, text]) => {
             const optionDiv = document.createElement('div');
             optionDiv.className = 'option-item';
             optionDiv.dataset.option = letter;
-            
             const isSelected = this.answers[index] === letter;
             if (isSelected) {
                 optionDiv.classList.add('selected');
             }
-            
             optionDiv.innerHTML = `
                 <div class="option-letter">${letter}</div>
                 <div class="option-text">${text}</div>
             `;
-            
             optionDiv.addEventListener('click', () => this.selectOption(letter));
             optionsContainer.appendChild(optionDiv);
         });
-        
         this.updateProgress();
         this.updateNavigationButtons();
     }
@@ -409,6 +416,15 @@ class QuizSystem {
         
         // Show detailed results
         this.displayDetailedResults(results.detailed_results);
+        // Re-attach retake and new quiz button event listeners
+        const retakeBtn = document.getElementById('retakeQuizBtn');
+        if (retakeBtn) {
+            retakeBtn.onclick = () => this.retakeQuiz();
+        }
+        const newQuizBtn = document.getElementById('newQuizBtn');
+        if (newQuizBtn) {
+            newQuizBtn.onclick = () => this.showQuizSetup();
+        }
     }
     
     displayDetailedResults(detailedResults) {
@@ -445,14 +461,25 @@ class QuizSystem {
     }
     
     retakeQuiz() {
-        this.resetQuiz();
-        this.startQuiz();
+        if (this.lastQuizParams) {
+            this.generateQuiz(this.lastQuizParams);
+        } else {
+            this.showQuizSetup();
+        }
     }
     
     showQuizSetup() {
         document.querySelector('.quiz-setup').style.display = 'block';
         document.getElementById('quizInterface').style.display = 'none';
         document.getElementById('quizResults').style.display = 'none';
+        // Optionally reset form fields
+        const form = document.querySelector('.quiz-form');
+        if (form) form.reset();
+        // Re-attach new quiz button event listener in case results section is hidden and shown again
+        const newQuizBtn = document.getElementById('newQuizBtn');
+        if (newQuizBtn) {
+            newQuizBtn.onclick = () => this.showQuizSetup();
+        }
     }
     
     resetQuiz() {

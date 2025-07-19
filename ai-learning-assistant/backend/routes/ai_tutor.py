@@ -100,12 +100,14 @@ def demo_generate_practice():
             return jsonify({'error': 'Subject and topic are required'}), 400
         
         difficulty = data.get('difficulty', 'medium')
+        exam_type = data.get('exam_type')
         
         # Generate practice questions
         questions = ai_service.generate_practice_questions(
             subject=data['subject'],
             topic=data['topic'],
-            difficulty=difficulty
+            difficulty=difficulty,
+            exam_type=exam_type
         )
         
         return jsonify({
@@ -113,7 +115,8 @@ def demo_generate_practice():
             'questions': questions,
             'subject': data['subject'],
             'topic': data['topic'],
-            'difficulty': difficulty
+            'difficulty': difficulty,
+            'exam_type': exam_type
         })
     
     except Exception as e:
@@ -132,12 +135,14 @@ def generate_practice():
             return jsonify({'error': 'Subject and topic are required'}), 400
         
         difficulty = data.get('difficulty', 'medium')
+        exam_type = data.get('exam_type')
         
         # Generate practice questions
         questions = ai_service.generate_practice_questions(
             subject=data['subject'],
             topic=data['topic'],
-            difficulty=difficulty
+            difficulty=difficulty,
+            exam_type=exam_type
         )
         
         return jsonify({
@@ -145,7 +150,8 @@ def generate_practice():
             'questions': questions,
             'subject': data['subject'],
             'topic': data['topic'],
-            'difficulty': difficulty
+            'difficulty': difficulty,
+            'exam_type': exam_type
         })
     
     except Exception as e:

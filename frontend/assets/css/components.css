@@ -124,11 +124,14 @@
 }
 
 .demo-container {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
+    display: flex;
+    flex-direction: column;
     gap: 30px;
-    align-items: start;
+    align-items: center;
     margin-top: 20px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
     animation: slideInUp 0.5s ease-out;
 }
 
@@ -149,6 +152,8 @@
     border-radius: 15px;
     color: white;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 800px;
 }
 
 .demo-info h3 {
@@ -984,8 +989,9 @@
 /* Responsive Design */
 @media (max-width: 768px) {
     .demo-container {
-        grid-template-columns: 1fr;
+        flex-direction: column;
         gap: 20px;
+        padding: 0 20px;
     }
     
     .input-group {
@@ -2440,6 +2446,13 @@ section#cta {
     padding: 30px;
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 800px;
+}
+
+.demo-form {
+    width: 100%;
+    max-width: 800px;
 }
 
 .demo-chat .chat-header {
@@ -2499,4 +2512,372 @@ section#cta {
     .rating-buttons {
         flex-direction: column;
     }
+}
+
+/* --- Demo & Chat Section Improvements --- */
+.demo-info, .demo-chat, .chat-container {
+    color: #222 !important;
+    background: #fff !important;
+    border-radius: 1.5rem !important;
+    box-shadow: 0 2px 12px rgba(60, 80, 180, 0.10) !important;
+    padding: 2rem 1.5rem !important;
+}
+
+.demo-features .feature, .demo-features .feature span {
+    color: #3a4ca8 !important;
+    font-weight: 600 !important;
+}
+
+.demo-features .feature i {
+    color: #3a4ca8 !important;
+}
+
+.chat-header h3, .chat-header span, .chat-header {
+    color: #2c3e50 !important;
+    font-weight: 700 !important;
+}
+
+.chat-messages, .chat-form, .chat-input, .chat-actions {
+    background: #f7f9fb !important;
+    color: #222 !important;
+}
+
+.message, .message-content, .user-message, .bot-message {
+    color: #222 !important;
+    background: #f4f7fa !important;
+    border-radius: 1rem !important;
+}
+
+input, textarea, select {
+    color: #222 !important;
+    background: #f7f9fb !important;
+    border: 1px solid #d1d5db !important;
+}
+
+input::placeholder, textarea::placeholder {
+    color: #888 !important;
+}
+
+/* Remove low-contrast styles */
+.demo-info p, .demo-info h3, .demo-features .feature span {
+    color: #2c3e50 !important;
+}
+
+/* Add border to chat area for focus */
+.demo-chat, .chat-container {
+    border: 2px solid #3a4ca8 !important;
+}
+
+/* --- Chatbot UI/UX Improvements --- */
+.chat-form .btn.btn-primary {
+    background: #3a4ca8 !important;
+    color: #fff !important;
+    border: none !important;
+    font-size: 1.1rem !important;
+    font-weight: 700 !important;
+    border-radius: 2rem !important;
+    padding: 0.7rem 2rem !important;
+    box-shadow: 0 2px 8px rgba(60, 80, 180, 0.10) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.chat-form .btn.btn-primary:hover {
+    background: #25337a !important;
+    box-shadow: 0 4px 16px rgba(60, 80, 180, 0.18) !important;
+    transform: translateY(-2px) scale(1.04);
+}
+
+.chat-form {
+    padding: 1.5rem 1rem !important;
+    background: #f7f9fb !important;
+    border-radius: 1rem !important;
+    box-shadow: 0 1px 4px rgba(60, 80, 180, 0.06) !important;
+}
+
+.chat-actions {
+    margin-top: 2.5rem !important;
+    position: relative !important;
+    z-index: 3 !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 1rem !important;
+    justify-content: flex-end !important;
+}
+
+.chat-messages {
+    background: #f4f7fa !important;
+    color: #222 !important;
+    border-radius: 1rem !important;
+    padding: 1.5rem 1rem !important;
+    min-height: 180px;
+    box-shadow: 0 1px 4px rgba(60, 80, 180, 0.06) !important;
+}
+
+.message, .message-content, .user-message, .bot-message {
+    color: #222 !important;
+    background: #fff !important;
+    border-radius: 1rem !important;
+    margin-bottom: 1rem !important;
+    padding: 1rem 1.2rem !important;
+    box-shadow: 0 1px 4px rgba(60, 80, 180, 0.04) !important;
+}
+
+/* Focus the chat area visually */
+.demo-chat, .chat-container {
+    box-shadow: 0 4px 24px rgba(60, 80, 180, 0.13) !important;
+    border: 2px solid #3a4ca8 !important;
+}
+
+/* --- Feature List: Only Checkmarks --- */
+.feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 1.2em 0 0 0;
+}
+.feature-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.7em;
+    font-size: 1.05rem;
+    color: #2c3e50;
+    margin-bottom: 0.5em;
+}
+.feature-list li i {
+    color: #3a4ca8;
+    font-size: 1.1em;
+}
+
+/* --- Testimonials Card Alignment --- */
+.testimonials-grid {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.testimonial-card {
+    background: #fff;
+    border-radius: 1.5rem;
+    box-shadow: 0 2px 12px rgba(60, 80, 180, 0.08);
+    padding: 2rem 1.5rem;
+    max-width: 350px;
+    min-width: 260px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.testimonial-content {
+    font-size: 1.1rem;
+    color: #2c3e50;
+    margin-bottom: 1.2em;
+}
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+.author-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #f4f7fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3em;
+    color: #3a4ca8;
+}
+.author-info h4 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #2c3e50;
+}
+.author-info span {
+    font-size: 0.98rem;
+    color: #6c7a89;
+}
+
+/* --- Open AI Chat Button Visibility --- */
+#chatToggle.btn {
+    background: #3a4ca8 !important;
+    color: #fff !important;
+    border: 2px solid #25337a !important;
+    font-weight: 700 !important;
+    box-shadow: 0 2px 8px rgba(60, 80, 180, 0.13) !important;
+    border-radius: 1.2rem !important;
+    padding: 0.6rem 1.5rem !important;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+#chatToggle.btn:hover {
+    background: #25337a !important;
+    color: #fff !important;
+    box-shadow: 0 4px 16px rgba(60, 80, 180, 0.18) !important;
+}
+
+/* --- Ensure Send/Submit Button is Always Visible in Chat --- */
+.chat-form {
+    position: relative !important;
+    margin-top: 1.2rem !important;
+    z-index: 2 !important;
+}
+.chat-actions {
+    position: relative !important;
+    z-index: 3 !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 1rem !important;
+    justify-content: flex-end !important;
+}
+
+/* Prevent chat area from clipping the form */
+.demo-chat, .chat-container {
+    overflow: visible !important;
+}
+
+/* --- Prevent Chat Overlap with Footer --- */
+.demo-chat, .chat-container {
+    max-height: 80vh !important;
+    overflow-y: auto !important;
+    margin-bottom: 2.5rem !important;
+    padding-bottom: 2.5rem !important;
+}
+
+/* --- Chat Window Size --- */
+.demo-chat, .chat-container {
+    min-width: 420px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 800px !important;
+    max-height: 98vh !important;
+    margin: 0 auto !important;
+}
+
+.demo-container {
+    flex-direction: column !important;
+    gap: 2.5rem !important;
+}
+
+.demo-info {
+    margin-bottom: 2.5rem !important;
+}
+
+/* --- Practice Questions Button Visibility --- */
+.chat-actions .btn.btn-outline {
+    background: #fff !important;
+    color: #3a4ca8 !important;
+    border: 2px solid #3a4ca8 !important;
+    font-weight: 700 !important;
+    opacity: 1 !important;
+    box-shadow: 0 2px 8px rgba(60, 80, 180, 0.08) !important;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+.chat-actions .btn.btn-outline:hover {
+    background: #3a4ca8 !important;
+    color: #fff !important;
+    box-shadow: 0 4px 16px rgba(60, 80, 180, 0.13) !important;
+}
+
+/* --- Feature Card Sizing and Icon Alignment --- */
+.feature-card {
+    min-width: 340px;
+    max-width: 480px;
+    min-height: 340px;
+    padding: 2.5rem 2rem;
+    margin: 2rem auto;
+}
+.feature-icon {
+    min-width: 38px;
+    max-width: 38px;
+    font-size: 2.1rem;
+    margin-right: 1.1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.feature-list li {
+    gap: 0.5em;
+}
+
+/* --- Chat Form Label Visibility --- */
+.chat-form label {
+    color: #25337a !important;
+    font-weight: 700 !important;
+    font-size: 1.05rem !important;
+    letter-spacing: 0.01em;
+    margin-bottom: 0.3em;
+    text-transform: uppercase;
+}
+
+/* Bring 'Ask Any Question' section up */
+#demo .demo-info {
+    margin-top: 0 !important;
+}
+#demo {
+    margin-top: 6rem !important;
+}
+
+.demo-chat, .chat-container {
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.demo {
+    display: block !important;
+    margin-top: 2rem !important;
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+}
+.demo-container {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100%;
+}
+.demo-chat, .chat-container {
+    max-width: 900px !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+}
+
+/* --- Practice Questions Visibility --- */
+.practice-questions, .questions-list, .question-item, .question-answer {
+    background: unset !important;
+    color: unset !important;
+    font-weight: unset !important;
+    padding: unset !important;
+    border-radius: unset !important;
+    margin-bottom: unset !important;
+}
+.practice-questions h4, .question-item h5 {
+    color: unset !important;
+    font-weight: unset !important;
+}
+.question-answer strong {
+    color: unset !important;
+    font-weight: unset !important;
+}
+
+.practice-questions, .questions-list, .question-item, .question-answer,
+.practice-questions *, .questions-list *, .question-item *, .question-answer * {
+    color: #111 !important;
+}
+
+.newsletter-form {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.newsletter-form input[type="email"] {
+    flex: 1;
+    min-width: 0;
+}
+.newsletter-form button {
+    white-space: nowrap;
+    min-width: 100px;
+    padding: 0.5rem 1.2rem;
 }

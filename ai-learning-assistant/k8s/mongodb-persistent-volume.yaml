@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mongodb-pv
+  namespace: ai-learning-assistant
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /data/mongodb
+  storageClassName: local-storage
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongodb-pvc
+  namespace: ai-learning-assistant
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-storage
+  resources:
+    requests:
+      storage: 10Gi 

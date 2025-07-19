@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+  namespace: ai-learning-assistant
+  labels:
+    app: mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo:6.0
+        ports:
+        - containerPort: 27017
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: ai-learning-assistant-config
+              key: MONGO_USERNAME
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ai-learning-assistant-secrets
+              key: MONGO_PASSWORD
+        - name: MONGO_INITDB_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: ai-learning-assistant-config
+              key: MONGO_DATABASE
+        volumeMounts:
+        - name: mongodb-data
+          mountPath: /data/db
+        - name: init-script
+          mountPath: /docker-entrypoint-initdb.d
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+      volumes:
+      - name: mongodb-data
+        persistentVolumeClaim:
+          claimName: mongodb-pvc
+      - name: init-script
+        configMap:
+          name: mongodb-init-script
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongodb-init-script
+  namespace: ai-learning-assistant
+data:
+  init-mongo.js: |
+    db = db.getSiblingDB('learning_assistant');
+    
+    // Create collections
+    db.createCollection('users');
+    db.createCollection('study_sessions');
+    db.createCollection('study_groups');
+    db.createCollection('quizzes');
+    db.createCollection('quiz_attempts');
+    
+    // Create indexes
+    db.users.createIndex({ "email": 1 }, { unique: true });
+    db.users.createIndex({ "username": 1 }, { unique: true });
+    db.study_sessions.createIndex({ "user_id": 1 });
+    db.study_groups.createIndex({ "name": 1 });
+    db.quizzes.createIndex({ "created_by": 1 });
+    db.quiz_attempts.createIndex({ "user_id": 1 });
+    db.quiz_attempts.createIndex({ "quiz_id": 1 }); 

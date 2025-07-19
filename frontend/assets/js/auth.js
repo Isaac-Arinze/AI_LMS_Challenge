@@ -44,7 +44,7 @@ function updateUserInterface() {
     // Show/hide sections based on authentication
     const sections = document.querySelectorAll('section');
     sections.forEach(section => {
-        if (section.id === 'home' || section.id === 'features' || section.id === 'testimonials' || section.id === 'demo' || section.id === 'cta') {
+        if (section.id === 'home' || section.id === 'features' || section.id === 'testimonials' || section.id === 'cta') {
             section.style.display = 'block';
         } else {
             section.style.display = 'none';

@@ -4,6 +4,14 @@ import { initChat, sendQuestion, rateResponse, generatePracticeQuestions } from 
 // Main App JavaScript
 document.addEventListener('DOMContentLoaded', function() {
     console.log('App initialized');
+    // Hide all sections except home on initial load
+    document.querySelectorAll('section').forEach(section => {
+        if (section.id !== 'home') {
+            section.style.display = 'none';
+        } else {
+            section.style.display = 'block';
+        }
+    });
     
     // Initialize mobile navigation
     initMobileNav();

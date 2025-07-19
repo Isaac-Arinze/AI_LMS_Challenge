@@ -6,6 +6,7 @@ import google.generativeai as genai
 import os
 import json
 import random
+import re
 
 quiz_bp = Blueprint('quiz', __name__)
 
@@ -14,6 +15,13 @@ def init_collections(db_instance):
     global quizzes_collection, quiz_attempts_collection
     quizzes_collection = db_instance.quizzes
     quiz_attempts_collection = db_instance.quiz_attempts
+
+def repair_json(text):
+    # Remove trailing commas before closing braces/brackets
+    text = re.sub(r',([ \t\r\n]*[}}\]])', r'\1', text)
+    # Replace smart quotes with normal quotes
+    text = text.replace('“', '"').replace('”', '"').replace("‘", "'").replace("’", "'")
+    return text
 
 # AI Service for quiz generation
 class QuizGenerationService:
@@ -31,15 +39,19 @@ class QuizGenerationService:
         }
         
         prompt = f"""
-        Generate {num_questions} multiple choice questions for {subject} topic: {topic}
+        Generate {num_questions} unique multiple choice questions for {subject} topic: {topic}
         
         Requirements:
+        - Each question must be different and not repeated.
         - Style: {exam_context.get(exam_type, exam_context['WAEC'])}
         - Difficulty: {difficulty}
         - Format: Each question should have 4 options (A, B, C, D)
         - Include explanations for correct answers
         - Questions should be objective and test understanding
         - Use Nigerian context where appropriate
+        - For each question, specify the exam type (e.g., 'WAEC', 'JAMB', 'NECO') and the year (e.g., '2019', '2021') the question is drafted from. Use realistic years between 2015 and 2023. If the question is not from a real past exam, make a plausible year and type.
+        
+        You must return exactly {num_questions} unique questions in a valid JSON array as shown below. Do not repeat any question. Do not return only one question. Each question must have exam_type and exam_year fields.
         
         Return the questions in this exact JSON format:
         {{
@@ -55,18 +67,19 @@ class QuizGenerationService:
                     "correct_answer": "A",
                     "explanation": "Explanation of why this is correct",
                     "difficulty": "{difficulty}",
-                    "topic": "{topic}"
+                    "topic": "{topic}",
+                    "exam_type": "WAEC",
+                    "exam_year": "2019"
                 }}
             ]
         }}
         
         Make sure the JSON is valid and properly formatted.
         """
-        
         try:
             response = self.model.generate_content(prompt)
             response_text = response.text.strip()
-            
+            print("Gemini raw response:", response_text)
             # Extract JSON from response
             if '```json' in response_text:
                 json_start = response_text.find('```json') + 7
@@ -76,16 +89,28 @@ class QuizGenerationService:
                 json_start = response_text.find('```') + 3
                 json_end = response_text.find('```', json_start)
                 response_text = response_text[json_start:json_end].strip()
-            
+            # Try to repair JSON before parsing
+            response_text = repair_json(response_text)
             questions_data = json.loads(response_text)
-            return questions_data.get('questions', [])
-            
+            print("Parsed questions:", questions_data.get('questions', []))
+            # Filter for unique questions by question text
+            questions = questions_data.get('questions', [])
+            unique_questions = []
+            seen = set()
+            for q in questions:
+                q_text = q.get('question', '').strip()
+                if q_text and q_text not in seen:
+                    unique_questions.append(q)
+                    seen.add(q_text)
+            if len(unique_questions) < num_questions:
+                print(f"Only {len(unique_questions)} unique questions generated, using fallback for the rest.")
+                fallback = self._get_fallback_questions(subject, topic, num_questions - len(unique_questions), exam_type)
+                unique_questions.extend(fallback)
+            return unique_questions[:num_questions]
         except Exception as e:
             print(f"Error generating quiz questions: {e}")
-            return self._get_fallback_questions(subject, topic, num_questions)
-    
-    def _get_fallback_questions(self, subject, topic, num_questions):
-        """Fallback questions if AI generation fails"""
+            return self._get_fallback_questions(subject, topic, num_questions, exam_type)
+    def _get_fallback_questions(self, subject, topic, num_questions, exam_type):
         fallback_questions = {
             "Mathematics": [
                 {
@@ -94,7 +119,19 @@ class QuizGenerationService:
                     "correct_answer": "B",
                     "explanation": "2x + 5 = 13 → 2x = 8 → x = 4",
                     "difficulty": "medium",
-                    "topic": topic
+                    "topic": topic,
+                    "exam_type": exam_type,
+                    "exam_year": "2021"
+                },
+                {
+                    "question": f"What is the square root of 81?",
+                    "options": {"A": "7", "B": "8", "C": "9", "D": "10"},
+                    "correct_answer": "C",
+                    "explanation": "The square root of 81 is 9.",
+                    "difficulty": "easy",
+                    "topic": topic,
+                    "exam_type": exam_type,
+                    "exam_year": "2019"
                 }
             ],
             "Physics": [
@@ -104,7 +141,19 @@ class QuizGenerationService:
                     "correct_answer": "B",
                     "explanation": "The SI unit of force is the Newton (N)",
                     "difficulty": "easy",
-                    "topic": topic
+                    "topic": topic,
+                    "exam_type": exam_type,
+                    "exam_year": "2018"
+                },
+                {
+                    "question": "What is the acceleration due to gravity on Earth?",
+                    "options": {"A": "9.8 m/s^2", "B": "10 m/s^2", "C": "8.9 m/s^2", "D": "12 m/s^2"},
+                    "correct_answer": "A",
+                    "explanation": "Standard gravity is 9.8 m/s^2.",
+                    "difficulty": "medium",
+                    "topic": topic,
+                    "exam_type": exam_type,
+                    "exam_year": "2020"
                 }
             ],
             "Chemistry": [
@@ -114,12 +163,26 @@ class QuizGenerationService:
                     "correct_answer": "B",
                     "explanation": "Au is the chemical symbol for gold (from Latin 'aurum')",
                     "difficulty": "easy",
-                    "topic": topic
+                    "topic": topic,
+                    "exam_type": exam_type,
+                    "exam_year": "2017"
+                },
+                {
+                    "question": "What is the pH of a neutral solution?",
+                    "options": {"A": "0", "B": "7", "C": "14", "D": "1"},
+                    "correct_answer": "B",
+                    "explanation": "A neutral solution has a pH of 7.",
+                    "difficulty": "easy",
+                    "topic": topic,
+                    "exam_type": exam_type,
+                    "exam_year": "2016"
                 }
             ]
         }
-        
-        return fallback_questions.get(subject, fallback_questions["Mathematics"]) * num_questions
+        fallback = fallback_questions.get(subject, fallback_questions["Mathematics"])
+        # Repeat and slice to get the required number of questions
+        result = (fallback * ((num_questions // len(fallback)) + 1))[:num_questions]
+        return result
 
 quiz_service = QuizGenerationService()
 

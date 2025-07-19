@@ -47,7 +47,6 @@
                     <div class="nav-actions">
                         <button onclick="showLogin()" class="btn btn-outline">Login</button>
                         <button onclick="showSignup()" class="btn btn-primary">Get Started</button>
-                        <button onclick="testNav()" class="btn btn-secondary">Test Nav</button>
                     </div>
                 </div>
                 
@@ -86,7 +85,7 @@
             </div>
             
             <div class="container">
-                <div class="hero-content">
+                <div class="hero-content" style="margin-top: 2.5rem;">
                     <div class="hero-text">
                         <div class="hero-badge">
                             <i class="fas fa-star"></i>
@@ -158,11 +157,10 @@
                     <h2 class="section-title">Why Students Choose AI Tutor Pro</h2>
                     <p class="section-subtitle">Experience the future of personalized learning</p>
                 </div>
-                
                 <div class="features-grid">
                     <div class="feature-card">
                         <div class="feature-icon">
-                        <i class="fas fa-brain"></i>
+                            <i class="fas fa-brain"></i>
                         </div>
                         <h3>Intelligent Explanations</h3>
                         <p>Get detailed, step-by-step explanations that adapt to your learning pace and style. Our AI understands context and builds on previous knowledge.</p>
@@ -172,10 +170,9 @@
                             <li><i class="fas fa-check"></i> Nigerian curriculum aligned</li>
                         </ul>
                     </div>
-                    
                     <div class="feature-card">
                         <div class="feature-icon">
-                        <i class="fas fa-clock"></i>
+                            <i class="fas fa-clock"></i>
                         </div>
                         <h3>24/7 Availability</h3>
                         <p>Never wait for help again. Our AI tutor is available round the clock, ready to assist with homework, exam prep, or concept clarification.</p>
@@ -185,10 +182,9 @@
                             <li><i class="fas fa-check"></i> Study at your pace</li>
                         </ul>
                     </div>
-                    
                     <div class="feature-card">
                         <div class="feature-icon">
-                        <i class="fas fa-graduation-cap"></i>
+                            <i class="fas fa-graduation-cap"></i>
                         </div>
                         <h3>Practice & Progress</h3>
                         <p>Generate unlimited practice questions, track your progress, and identify areas for improvement with our comprehensive analytics.</p>
@@ -209,7 +205,6 @@
                     <h2 class="section-title">Success Stories</h2>
                     <p class="section-subtitle">See how AI Tutor Pro is transforming learning</p>
                 </div>
-                
                 <div class="testimonials-grid">
                     <div class="testimonial-card">
                         <div class="testimonial-content">
@@ -225,7 +220,6 @@
                             </div>
                         </div>
                     </div>
-                    
                     <div class="testimonial-card">
                         <div class="testimonial-content">
                             <p>"The practice questions are perfect for exam preparation. I improved my physics grade from C to A in just 3 months!"</p>
@@ -240,7 +234,6 @@
                             </div>
                         </div>
                     </div>
-                    
                     <div class="testimonial-card">
                         <div class="testimonial-content">
                             <p>"As a parent, I love how AI Tutor Pro provides 24/7 support. My daughter can study anytime without waiting for a tutor."</p>
@@ -266,82 +259,10 @@
                     <h2 class="section-title">Try Our AI Tutor</h2>
                     <p class="section-subtitle">Experience the power of personalized AI tutoring</p>
                 </div>
-                
-                <div class="demo-container">
-                    <div class="demo-info">
-                        <h3>Ask Any Question</h3>
-                        <p>Get instant, detailed explanations for any subject. Our AI understands the Nigerian curriculum and provides step-by-step solutions.</p>
-                        
-                        <div class="demo-features">
-                            <div class="feature">
-                                <i class="fas fa-brain"></i>
-                                <span>Smart Explanations</span>
-                            </div>
-                            <div class="feature">
-                                <i class="fas fa-clock"></i>
-                                <span>24/7 Available</span>
-                            </div>
-                            <div class="feature">
-                                <i class="fas fa-graduation-cap"></i>
-                                <span>Curriculum Aligned</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="demo-chat">
-                        <div class="chat-header">
-                            <h3>AI Tutor Chat</h3>
-                            <button id="chatToggle" class="btn btn-outline btn-small">
-                                <i class="fas fa-comments"></i>
-                                <span id="toggleText">Open AI Chat</span>
-                            </button>
-                        </div>
-                        
-                        <div id="demoContainer" class="chat-container" style="display: none;">
-                            <div class="chat-messages" id="chatMessages">
-                                <!-- Messages will appear here -->
-                            </div>
-                            
-                            <form id="chatForm" class="chat-form">
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="subjectSelect">Subject</label>
-                                        <select id="subjectSelect" class="form-control" required>
-                                            <option value="">Select Subject</option>
-                                            <option value="Mathematics">Mathematics</option>
-                                            <option value="Physics">Physics</option>
-                                            <option value="Chemistry">Chemistry</option>
-                                            <option value="Biology">Biology</option>
-                                            <option value="English">English</option>
-                                            <option value="Literature">Literature</option>
-                                            <option value="Economics">Economics</option>
-                                            <option value="Government">Government</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="topicInput">Topic</label>
-                                        <input type="text" id="topicInput" class="form-control" placeholder="e.g., Quadratic Equations" required>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="questionInput">Your Question</label>
-                                    <textarea id="questionInput" class="form-control" placeholder="Ask your question here..." required></textarea>
-                                </div>
-                                
-                                <div class="chat-actions">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-paper-plane"></i>
-                                        Ask Question
-                                    </button>
-                                    <button type="button" onclick="generatePracticeQuestions()" class="btn btn-outline">
-                                        <i class="fas fa-lightbulb"></i>
-                                        Generate Practice Questions
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+                <div class="demo-container" style="text-align:center;">
+                    <button class="btn btn-primary btn-large" onclick="navigateToSection('chat')">
+                        <i class="fas fa-comments"></i> Open AI Tutor Chat
+                    </button>
                 </div>
             </div>
         </section>

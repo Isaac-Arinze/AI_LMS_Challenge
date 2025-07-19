@@ -30,7 +30,12 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
 
 # Initialize extensions
 jwt = JWTManager(app)
-CORS(app, origins=['http://localhost:8000', 'http://127.0.0.1:8000'], supports_credentials=True)
+CORS(app, origins=[
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000'
+], supports_credentials=True)
 
 # MongoDB Configuration
 MONGO_URI = os.getenv('MONGO_URI', 'mongodb://localhost:27017/')
